@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
@@ -58,13 +59,13 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode){
-            case MY_PERMITTION:
+            case MY_PERMITTION:{
                 if (grantResults.length >= 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     myWifiMethod();
                 } else {
                     Toast.makeText(this, "Access di block!!", Toast.LENGTH_SHORT).show();
                 }
-                break;
+            }
         }
     }
 
@@ -72,30 +73,30 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)){
-                wifiList = wifiManager.getScanResults()private void myWifiMethod() {
-                    wifiManager = (WifiManager) MainActivity.this.getApplicationContext().getSystemService(WIFI_SERVICE);
-                }
+                wifiList = wifiManager.getScanResults();
                 sb= new StringBuilder();
                 sb.append("\n"+"Number Of Wifi connection: "+wifiList.size()+"\n");
                 for (int i=0; i < wifiList.size(); i++){
                     sb.append(new Integer(i+1).toString()+". ");
-                    sb.append("SSID: "+(wifiList.get(i).SSID).toString()+"\n");
-                    sb.append("BSSID: "+(wifiList.get(i).SSID).toString()+"\n");
-                    sb.append("SSID: "+(wifiList.get(i).SSID).toString()+"\n");
-                    sb.append("SSID: "+(wifiList.get(i).SSID).toString()+"\n");
-                    sb.append("SSID: "+(wifiList.get(i).SSID).toString()+"\n");
-                    sb.append("SSID: "+(wifiList.get(i).SSID).toString()+"\n");
-                    sb.append("SSID: "+(wifiList.get(i).SSID).toString()+"\n");
-                    sb.append("SSID: "+(wifiList.get(i).SSID).toString()+"\n");
-                    sb.append("SSID: "+(wifiList.get(i).SSID).toString()+"\n");
-                    sb.append("SSID: "+(wifiList.get(i).SSID).toString()+"\n");
+                    sb.append("SSID: "+(wifiList.get(i).SSID)+"\n");
+                    sb.append("BSSID: "+(wifiList.get(i).BSSID)+"\n");
+                    sb.append("capabilities: "+(wifiList.get(i).capabilities)+"\n");
+                    sb.append("level: "+(wifiList.get(i).level)+"\n");
+                    sb.append("frequency: "+(wifiList.get(i).frequency)+"\n");
+                    sb.append("desripbeContent: "+(wifiList.get(i).describeContents())+"\n");
+                    sb.append("centerFreq0: "+(wifiList.get(i).centerFreq1)+"\n");
+                    sb.append("centerFreq1: "+(wifiList.get(i).centerFreq1)+"\n");
+                    sb.append("chanelWidth: "+(wifiList.get(i).channelWidth)+"\n");
+                    sb.append("\n\n\n");
                 }
+                wifiInfo.setText(sb);
             }
         }
-    }
+    };
 
     private void myWifiMethod() {
         wifiManager = (WifiManager) MainActivity.this.getApplicationContext().getSystemService(WIFI_SERVICE);
-        MainActivity.this.registerReceiver()
+        MainActivity.this.registerReceiver(wifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        wifiManager.startScan();
     }
 }
